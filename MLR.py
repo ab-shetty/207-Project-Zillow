@@ -2,10 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-df_properties = pd.read_csv('./data/properties_2016.csv')
+df_properties = pd.read_csv('C:/Users/athen/Downloads/properties_2016.csv')
 
-df_2016 = pd.read_csv('./data/train_2016_v2.csv', parse_dates=["transactiondate"])
-df_2017 = pd.read_csv('./data/train_2017.csv', parse_dates=["transactiondate"])
+df_2016 = pd.read_csv('C:/Users/athen/Downloads/train_2016_v2.csv', parse_dates=["transactiondate"])
+df_2017 = pd.read_csv('C:/Users/athen/Downloads/train_2017.csv', parse_dates=["transactiondate"])
 
 df_logs = pd.concat([df_2016, df_2017])
 df_logs
@@ -52,7 +52,7 @@ print(df_final.garagecarcnt.value_counts())
 
 df_final[['garagetotalsqft']][df_final.garagetotalsqft==0.0]
 
-"""### Showing all properties where a property was sold more than once"""
+"""Showing all properties where a property was sold more than once"""
 
 v = df_final.parcelid.value_counts()
 df_final[df_final.parcelid.isin(v.index[v.gt(2)])]
@@ -66,8 +66,12 @@ df_final = df_final.drop(df_final[df_final.taxvaluedollarcnt.isnull()].index)
 """Multi Linear Regression Model"""
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_absolute_error
+from sklearn.preprocessing import StandardScaler
 import numpy as np
+
+
+baseline_preds = np.ones(df_final.shape[0])*df_final['logerror'].mean()
 
 # Getting column names of all columns w/o any missing values, and dropping parcelid
 selected = df_final.columns[df_final.apply(lambda c: c.isnull().sum() == 0)].drop(['parcelid'])
@@ -78,10 +82,7 @@ data = df_final[selected]
 # Changing transactiondate to a datetime type
 data['transactiondate'] = pd.to_datetime(data['transactiondate'])
 
-# Extracting month, day, and year based on the
-# transaction date and setting them as separate variables
-data['month'] = data['transactiondate'].dt.month
-data['day'] = data['transactiondate'].dt.day
+# Extracting year based on the transaction date and setting it as a separate variable
 data['year'] = data['transactiondate'].dt.year
 
 # Setting test data to be all 2017 transactions
@@ -89,14 +90,14 @@ X_test = data[data['year'] == 2017]
 y_test = X_test['logerror']
 # Dropping logerror (outcome variable), transactiondate (represented by month and day),
 # year and assessment year (since all observations in this subset have the same year value)
-X_test = X_test.drop(['logerror', 'transactiondate', 'year', 'assessmentyear'], axis=1)
+X_test = X_test.drop(['logerror', 'transactiondate', 'year', 'assessmentyear', 'fips'], axis=1)
 
 # Setting train data to be all 2016 transactions
 X_train = data[data['year'] != 2017]
 y_train = X_train['logerror']
 # Dropping logerror (outcome variable), transactiondate (represented by month and day),
 # year and assessment year (since all observations in this subset have the same year value)
-X_train = X_train.drop(['logerror', 'transactiondate', 'year', 'assessmentyear'], axis=1)
+X_train = X_train.drop(['logerror', 'transactiondate', 'year', 'assessmentyear', 'fips'], axis=1)
 
 X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
 
@@ -127,7 +128,7 @@ def build_model(num_features, learning_rate):
   # setting a random seed ensures that results are the same on each identical
   # training run.
   tf.keras.backend.clear_session()
-  tf.random.set_seed(0)
+  tf.random.set_seed(42)
 
   # Build a model using keras.Sequential. While this is intended for neural
   # networks (which may have multiple layers), we want just a single layer for
@@ -141,23 +142,23 @@ def build_model(num_features, learning_rate):
       bias_initializer=tf.ones_initializer,    # initialize bias to 1
   ))
 
-  # We need to choose an optimizer. We'll use GD, which is actually mini-batch GD
+  # We need to choose an optimizer
   optimizer = tf.keras.optimizers.Adam(learning_rate = learning_rate)
 
   # Finally, compile the model. This finalizes the graph for training.
   # We specify the loss and the optimizer above
   model.compile(
         optimizer=optimizer,
-        loss='mse'
+        loss='mae'
   )
 
   return model
 
 # Build and compile test_model
-test_model = build_model(num_features=X_train.shape[1],learning_rate=0.01)
+test_model = build_model(num_features=X_train.shape[1],learning_rate=0.0004)
 
 # Fit test model
-test_num_epochs=5
+test_num_epochs=10
 test_train_tf = test_model.fit(x=X_train_std, y=y_train_std, epochs=test_num_epochs, verbose=0,
                          validation_data=(X_val_std, y_val_std))
 
@@ -180,7 +181,19 @@ print("\nPercentage difference between the losses:",
  ((np.array(test_train_tf.history['loss']) - np.array(test_train_tf.history['val_loss']))
  / np.array(test_train_tf.history['val_loss'])) * 100)
 
-train_MSE = test_model.evaluate(X_train_std, y_train_std)
-test_MSE = test_model.evaluate(X_test_std, y_test_std)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+train_preds = test_model.predict(X_train_scaled)
+test_preds = test_model.predict(X_test_scaled)
+
+print("Train MAE:", mean_absolute_error(y_train, train_preds))
+print("Test MAE:", mean_absolute_error(y_test, test_preds))
+print("Baseline Train MAE:", mean_absolute_error(y_train, baseline_preds[:len(y_train)]))
+print("Baseline Test MAE:", mean_absolute_error(y_test, baseline_preds[:len(y_test)]))
 
 
+learning_rate = 0.0001
+num_epochs = 10
+optimizer='Adam'
