@@ -192,8 +192,3 @@ print("Train MAE:", mean_absolute_error(y_train, train_preds))
 print("Test MAE:", mean_absolute_error(y_test, test_preds))
 print("Baseline Train MAE:", mean_absolute_error(y_train, baseline_preds[:len(y_train)]))
 print("Baseline Test MAE:", mean_absolute_error(y_test, baseline_preds[:len(y_test)]))
-
-
-learning_rate = 0.0001
-num_epochs = 10
-optimizer='Adam'
