@@ -75,6 +75,8 @@ Link to data: https://www.kaggle.com/competitions/zillow-prize-1/data
 We decided to start with trying a multi-linear regression (MLR) algorithm as it’s simple, interpretable, and useful for understanding the impact of each feature on the target variable. However, we expect the multi-linear regression (MLR) model not to do well, as it is unable to capture non-linear relationships.
 
 We started with looking at all of the features in the properties_2016 dataset. We narrowed the features of interest based on which features didn’t have too many missing values or that could reasonably have the missing values replaced or dropped. 
+
+### Hyperparameter Tuning
 Next, we looked at which optimizer would perform best on the MLR model while holding all other hyperparameters equal. We looked at multiple optimizers, including Adadelta, Adafactor, Adagrad, Adam, Adamax, Lion, Nadam, and SGD. ‘Adam’ performed the best, so we chose that optimizer for our final MLR model.
 
 We then tested various epochs, starting from 5 up to 30. We found 10 epochs were enough to reach a stabilized mean absolute loss. 
