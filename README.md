@@ -88,18 +88,6 @@ The Optuna library for hyperparameter tuning with the following parameter values
 * Colsample_bytree (0.6 to 1.0) - fraction of features used for each tree
 * N_estimators (100 to 1000) - number of trees in the model
 
-Gradient Boosting Algorithms: Scalable boosted tree algorithm, where trees are built in parallel. It minimizes the loss function by adding models sequentially, focusing on reducing the errors made by the previous models. Excellent for handling complex, non-linear relationships in the data, and tabular data.  XGBoost was released March 27, 2014, a few years before the Zillow competition and not widely used. It started gaining in popularity, and XGBoost was named among InfoWorld’s coveted Technology of the Year award winners in 2019. XGBoost is easy to implement. The run time is fast, and it provides excellent results. XGBoost performed well against the 2016 Zillow ZEstimate. It had a 0.00134 improvement for the private score over the Zillow baselise, and 0.00104 improvement for the public score.
-
-The train vs validation MAE were within 1%, so it generalized well.
-
-The Optuna library for hyperparameter tuning with the following parameter values:
-* Lambda (1e-8 to 1, log=true) - L2 regularization term on weights
-* Alpha (1e-8 to 1, log=true) - L1 regularization term on weights
-* Eta (0.01 to 0.1) - learning rate step size the optimizer makes updates to the weights 
-* Max_depth (1 to 9) - maximum depth of the tree models
-* Subsample (0.6 to 1.0) - fraction of observations used for each tree
-* Colsample_bytree (0.6 to 1.0) - fraction of features used for each tree
-* N_estimators (100 to 1000) - number of trees in the model
 
 ## Model 4: NN + XGBoost
 
