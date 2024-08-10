@@ -47,33 +47,30 @@ We concluded that the MLR model is likely inappropriate for this model, as lower
 
 | Name               | Section Worked On                        | Hours Spent |
 |--------------------|------------------------------------------|-------------|
-| Abhishek Shetty    | **Feature Engineering**                   | 8           |
+| Abhishek Shetty    | **Feature Engineering**                  | 8           |
 |                    | - Creating New Features                  | 5           |
 |                    | - Feature Selection                      | 3           |
-|                    | **Combination Model (NN + XGBoost)**      | 12          |
+|                    | **Combination Model (NN + XGBoost)**     | 12          |
 |                    | - Model Development                      | 7           |
 |                    | - Training and Integration               | 5           |
 |                    | **Hyperparameter Tuning**                | 6           |
 |                    | - Tuning Combined Model                  | 6           |
 |                    | **Total**                                | **26**      |
-|--------------------|------------------------------------------|-------------|
-| Ahmeda Cheick      | **Exploratory Data Analysis (EDA)**       | 10          |
+| Ahmeda Cheick      | **Exploratory Data Analysis (EDA)**      | 10          |
 |                    | - Data Cleaning                          | 4           |
 |                    | - Visualizations                         | 3           |
 |                    | **Neural Networks**                      | 12          |
 |                    | - Model Architecture                     | 5           |
 |                    | - Training and Evaluation                | 7           |
 |                    | **Total**                                | **22**      |
-|--------------------|------------------------------------------|-------------|
-| Athena Le          | **Multi-linear Regression**              | 11           |
+| Athena Le          | **Multi-linear Regression**              | 11          |
 |                    | - Model Development                      | 8           |
 |                    | - Model Evaluation                       | 3           |
-|                    | **Model Architecture**                   | 6           |
-|                    | - Designing Model Structure              | 4           |
-|                    | - Evaluating Performance                 | 2           |
-|                    | **Total**                                | **19**      |
-|--------------------|------------------------------------------|-------------|
-| Phillip Hoang      | **Feature Engineering**                   | 8           |
+|                    | **Model Architecture**                   | 11           |
+|                    | - Designing Model Structure              | 7           |
+|                    | - Evaluating Performance                 | 4          |
+|                    | **Total**                                | **22**      |
+| Phillip Hoang      | **Feature Engineering**                  | 8           |
 |                    | - Creating New Features                  | 5           |
 |                    | - Feature Selection                      | 3           |
 |                    | **XGBoost**                              | 10          |
@@ -83,7 +80,6 @@ We concluded that the MLR model is likely inappropriate for this model, as lower
 |                    | - Designing Model Structure              | 4           |
 |                    | - Hyperparameter Tuning                  | 2           |
 |                    | **Total**                                | **24**      |
-
 
 
 [keras-url]: https://keras.io/
