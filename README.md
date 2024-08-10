@@ -31,12 +31,8 @@ A repository to collaborate on the 207 final project with the Zillow dataset fro
 * ![Optuna](https://img.shields.io/badge/Optuna-8A2BE2)
 * ![XGBoost](https://img.shields.io/badge/XGBoost-8A2BE2)
 
-<<<<<<< HEAD
-## Zillow Prize: Zillow’s Home Value Prediction (Zestimate)
 
-=======
 ## Introduction: Zillow Prize: Zillow’s Home Value Prediction (Zestimate)
->>>>>>> 85c73e1 (update readme with more readme)
 https://www.kaggle.com/competitions/zillow-prize-1
 
 **Question:** Can we improve the Zillow Zestimate? YES
