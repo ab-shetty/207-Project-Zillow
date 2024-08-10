@@ -36,7 +36,8 @@ A repository to collaborate on the 207 final project with the Zillow dataset fro
 https://www.kaggle.com/competitions/zillow-prize-1
 
 **Question:** Can we improve the Zillow Zestimate? YES
-Specifically, predict the log-error between Zillow’s Zestimate and the actual sale price, given all the features of a home. The log error is defined as
+Specifically, predict the log-error between Zillow’s Zestimate and the actual sale price, given all the features of a home. The log error is defined as:
+<br>
 𝑙𝑜𝑔𝑒𝑟𝑟𝑜𝑟=𝑙𝑜𝑔(𝑍𝑒𝑠𝑡𝑖𝑚𝑎𝑡𝑒)−𝑙𝑜𝑔(𝑆𝑎𝑙𝑒𝑃𝑟𝑖𝑐𝑒)
 
 **Motivation (Why is it interesting?):** 
