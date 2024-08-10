@@ -33,7 +33,8 @@ A repository to collaborate on the 207 final project with the Zillow dataset fro
 
 
 ## Introduction: Zillow Prize: Zillow’s Home Value Prediction (Zestimate)
-https://www.kaggle.com/competitions/zillow-prize-1
+Final Presentation: https://docs.google.com/presentation/d/1P2qw-P_IGXfVtL0Z3CI2SN_yu2evm7HAHM72QR8oEGk/edit?usp=sharing
+Competition Website: https://www.kaggle.com/competitions/zillow-prize-1
 
 **Question:** Can we improve the Zillow Zestimate? YES
 Specifically, predict the log-error between Zillow’s Zestimate and the actual sale price, given all the features of a home. The log error is defined as:
@@ -47,6 +48,15 @@ Specifically, predict the log-error between Zillow’s Zestimate and the actual 
 * Scores from the Kaggle leaderboard are published to benchmark our models
 
 **Data:** Full list of real estate properties in three counties (Los Angeles, Orange and Ventura, California) data in 2016 for train and validation. Zillow maintains public (2016) and private (2017) data for testing used for competition scoring.
+Link to data: https://www.kaggle.com/competitions/zillow-prize-1/data
+
+| Data File             |  Records  | Columns | 
+| --------------------- | --------- | ------- | 
+| properties_2016.csv   | 2,985,217 | 58      | 
+| properties_2017.csv   | 2,985,217 | 58      | 
+| train_2016_v2.csv     | 90,275    | 3       | 
+| train_2016.csv        | 77,613    | 3       | 
+| sample_submission.csv | 2,985,217 | 7       | 
 
 **Modeling/Experiments:**
 * Multi linear regression - Worse than Zillow
