@@ -351,5 +351,5 @@ def main():
 
 
 if __name__ == "__main__":
-    # main()
-    run_combination_model()
+    main()
+    # run_combination_model()
