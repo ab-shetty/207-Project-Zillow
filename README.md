@@ -10,13 +10,13 @@ A repository to collaborate on the 207 final project with the Zillow dataset fro
 * ![Optuna](https://img.shields.io/badge/Optuna-8A2BE2)
 * ![XGBoost](https://img.shields.io/badge/XGBoost-8A2BE2)
 
-## Linear Regression Model
+## Model 1: Linear Regression
 
-## Neural Network Model
+## Model 2: Neural Network
 
-## XGBoost Model
+## Model 3: XGBoost
 
-## NN + XGBoost Model
+## Model 4: NN + XGBoost
 
 ## How to run the pipeline/installation
 
