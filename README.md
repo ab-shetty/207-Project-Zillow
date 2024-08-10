@@ -103,6 +103,26 @@ The Optuna library for hyperparameter tuning with the following parameter values
 
 ## Model 4: NN + XGBoost
 
+## Comparative Model Performance
+
+We find that our models perform as such relative to the Zillow model baseline:
+
+Multi linear regression - Worse than Zillow <br>
+Neural Networks - Better than Zillow <br>
+Gradient Boosting Algorithms - Better than Zillow <br>
+Combination (Neural Network with XGBoost) - Better than Zillow
+
+A numerical summary of our models' performance is shown below:
+
+
+| Model              | Private Score | Public Score | Private Score Improvement | Public Score Improvement |
+| ------------------ | ------------- | ------------ | ------------------------- | ------------------------ |
+| Zillow (Baseline)  | 0.07742       | 0.06630      | 0.00000                    | 0.00000                   |
+| Linear Regression  | 0.09671       | 0.08628      | -0.01929                   | -0.01998                  |
+| Neural Network     | 0.07572       | 0.06489      | 0.00170                    | 0.00141                   |
+| XGBoost            | 0.07608       | 0.06526      | 0.00134                    | 0.00104                   |
+| Combination        | 0.07562       | 0.06492      | 0.00180                    | 0.00138                   |
+
 ## How to Run the Pipeline/Installation
 This section provides a step-by-step guide on how to set up and run the Zillow project pipeline. You will learn how to clone the repository, install the necessary dependencies, and execute the Python script that allows you to train different models or use a pretrained model to generate predictions.
 
