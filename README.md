@@ -23,25 +23,25 @@ A repository to collaborate on the 207 final project with the Zillow dataset fro
 
 https://www.kaggle.com/competitions/zillow-prize-1
 
-Question: Can we improve the Zillow Zestimate? YES
+**Question:** Can we improve the Zillow Zestimate? YES
 Specifically, predict the log-error between Zillow’s Zestimate and the actual sale price, given all the features of a home. The log error is defined as
 𝑙𝑜𝑔𝑒𝑟𝑟𝑜𝑟=𝑙𝑜𝑔(𝑍𝑒𝑠𝑡𝑖𝑚𝑎𝑡𝑒)−𝑙𝑜𝑔(𝑆𝑎𝑙𝑒𝑃𝑟𝑖𝑐𝑒)
 
-Motivation (Why is it interesting?): 
-. Zillow has since become established as one of the largest, most trusted marketplaces for real estate information in the U.S. and a leading example of impactful machine learning
-. $1M Kaggle competition closed in 2018
-. Well defined problem
-. Scores from the Kaggle leaderboard are published to benchmark our models
+**Motivation (Why is it interesting?):** 
+* Zillow has since become established as one of the largest, most trusted marketplaces for real estate information in the U.S. and a leading example of impactful machine learning
+* $1M Kaggle competition closed in 2018
+* Well defined problem
+* Scores from the Kaggle leaderboard are published to benchmark our models
 
-Data: Full list of real estate properties in three counties (Los Angeles, Orange and Ventura, California) data in 2016 for train and validation. Zillow maintains public (2016) and private (2017) data for testing used for competition scoring.
+**Data:** Full list of real estate properties in three counties (Los Angeles, Orange and Ventura, California) data in 2016 for train and validation. Zillow maintains public (2016) and private (2017) data for testing used for competition scoring.
 
-Modeling/Experiments: 
-. Multi linear regression - Worse than Zillow
-. Neural Networks - Better than Zillow
-. Gradient Boosting Algorithms - Better than Zillow
-. Combination (Neural Network with XGBoost) - Better than Zillow
+**Modeling/Experiments:**
+* Multi linear regression - Worse than Zillow
+* Neural Networks - Better than Zillow
+* Gradient Boosting Algorithms - Better than Zillow
+* Combination (Neural Network with XGBoost) - Better than Zillow
 
-Future Work: Feature Engineering, Explore other Combination Models
+**Future Work:** Feature Engineering, Explore other Combination Models
 
 
 ## Model 1: Linear Regression
@@ -68,13 +68,13 @@ Gradient Boosting Algorithms: Scalable boosted tree algorithm, where trees are b
 The train vs validation MAE were within 1%, so it generalized well.
 
 The Optuna library for hyperparameter tuning with the following parameter values:
-. Lambda (1e-8 to 1, log=true) - L2 regularization term on weights
-. Alpha (1e-8 to 1, log=true) - L1 regularization term on weights
-. Eta (0.01 to 0.1) - learning rate step size the optimizer makes updates to the weights 
-. Max_depth (1 to 9) - maximum depth of the tree models
-. Subsample (0.6 to 1.0) - fraction of observations used for each tree
-. Colsample_bytree (0.6 to 1.0) - fraction of features used for each tree
-. N_estimators (100 to 1000) - number of trees in the model
+* Lambda (1e-8 to 1, log=true) - L2 regularization term on weights
+* Alpha (1e-8 to 1, log=true) - L1 regularization term on weights
+* Eta (0.01 to 0.1) - learning rate step size the optimizer makes updates to the weights 
+* Max_depth (1 to 9) - maximum depth of the tree models
+* Subsample (0.6 to 1.0) - fraction of observations used for each tree
+* Colsample_bytree (0.6 to 1.0) - fraction of features used for each tree
+* N_estimators (100 to 1000) - number of trees in the model
 
 ## Model 4: NN + XGBoost
 
