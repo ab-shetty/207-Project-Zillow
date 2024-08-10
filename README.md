@@ -2,6 +2,15 @@
 
 A repository to collaborate on the 207 final project with the Zillow dataset from Kaggle. 
 
+## Table of Contents
+- [Built With](#built-with)
+- [Model 1: Linear Regression](#model-1-linear-regression)
+- [Model 2: Neural Network](#model-2-neural-network)
+- [Model 3: XGBoost](#model-3-xgboost)
+- [Model 4: NN + XGBoost](#model-4-nn--xgboost)
+- [How to Run the Pipeline/Installation](#how-to-run-the-pipelineinstallation)
+- [Contribution Table](#contribution-table)
+
 ### Built With
 
 * ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
@@ -31,11 +40,42 @@ We concluded that the MLR model is likely inappropriate for this model, as lower
 
 ## Model 4: NN + XGBoost
 
-## How to run the pipeline/installation
+## How to Run the Pipeline/Installation
 
 ## Contribution Table
+<br>
 
-
+| Name               | Section Worked On                        | Hours Spent |
+|--------------------|------------------------------------------|-------------|
+| Abhishek Shetty    | **Feature Engineering**                   | 8           |
+|                    | - Creating New Features                  | 5           |
+|                    | - Feature Selection                      | 3           |
+|                    | **Combination Model (NN + XGBoost)**      | 12          |
+|                    | - Model Development                      | 7           |
+|                    | - Training and Integration               | 5           |
+|                    | **Hyperparameter Tuning**                | 6           |
+|                    | - Tuning Combined Model                  | 6           |
+| Ahmeda Cheick      | **Exploratory Data Analysis (EDA)**       | 10          |
+|                    | - Data Cleaning                          | 4           |
+|                    | - Visualizations                         | 3           |
+|                    | **Neural Networks**                      | 12          |
+|                    | - Model Architecture                     | 5           |
+|                    | - Training and Evaluation                | 7           |
+| Athena Le          | **Multi-linear Regression**              | 11           |
+|                    | - Model Development                      | 8           |
+|                    | - Model Evaluation                       | 3           |
+|                    | **Model Architecture**                   | 6           |
+|                    | - Designing Model Structure              | 4           |
+|                    | - Evaluating Performance                 | 2           |
+| Phillip Hoang      | **Feature Engineering**                   | 8           |
+|                    | - Creating New Features                  | 5           |
+|                    | - Feature Selection                      | 3           |
+|                    | **XGBoost**                              | 10          |
+|                    | - Model Development                      | 6           |
+|                    | - Model Tuning                           | 4           |
+|                    | **Model Architecture**                   | 6           |
+|                    | - Designing Model Structure              | 4           |
+|                    | - Hyperparameter Tuning                  | 2           |
 
 [keras-url]: https://keras.io/
 [React-url]: https://reactjs.org/
