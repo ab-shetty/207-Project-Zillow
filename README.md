@@ -131,7 +131,14 @@ The Optuna library for hyperparameter tuning with the following parameter values
 * N_estimators (100 to 1000) - number of trees in the model
 
 
-## Model 4: NN + XGBoost
+## Model 4: Neural Network + XGBoost
+
+The combination model combines the arhcitecures of the neural network model and the XGBoost model. We run our Zillow data through a neural network. Our final predictions from the neural network model then go into XGBoost, which then outputs a prediction of log error for each data point.
+
+Hyperparameter tuning retains the same structure for both the neural network model and the XGBoost model. For the neural network, it optimizes on the hyperparameters of  learning rate, resolution of geographic features, number of training epochs, and batch size for 100 trials. The best parameters are used to create the neural network model.
+
+Using this model, predictions are generated for the train and validation datasets. These are used to train the XGBoost model. Hyperparameters are tuned in the exact manner as described above under Model 3: XGBoost. After 100 trials, the best parameters are used to create an XGBoost model. Final predictions for log error are then generated from this model.
+
 
 ## Comparative Model Performance
 
