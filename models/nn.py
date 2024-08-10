@@ -23,6 +23,9 @@ def process_nn_data(df_all):
     df['year'] = df.transactionmonth.str[:-2]
     df['weekday'] = df.transactiondate.dt.day_of_week
 
+    df['year'] = df['year'].astype('int64')
+    df['month'] = df['month'].astype('int64')
+
     # Select only certain features from full dataset
     X = df[['bedroomcnt', 'roomcnt', 'bathroomcnt', 'taxamount', 'landtaxvaluedollarcnt', 'taxvaluedollarcnt', 'structuretaxvaluedollarcnt',
             'latitude', 'longitude', 'month', 'year', 'weekday',
@@ -61,7 +64,7 @@ def nn_train_val(X_train, X_val, Y_train, Y_val):
     Y_val_std = (Y_val - Y_train.mean())/Y_train.std()
 
     # Mask missing data in columns - helps a tiny bit
-    mask_value = -999
+    mask_value = 0
     X_train_std = X_train_std.fillna(mask_value)
     X_val_std = X_val_std.fillna(mask_value)
 
@@ -87,89 +90,213 @@ def objective_nn(trial, train_x, Y_train_std, val_x, Y_val_std):
 
     model = build_model(lr, resolution_in_degrees)
 
-    print(train_x)
-    print("validation")
-    print(val_x)
-    print(Y_val_std)
-    # Train the model
+    # debug_input_shapes(train_x)
+    # debug_input_shapes(val_x)
+        # Train the model
     history = model.fit(
-        x=train_x,
-        y=Y_train_std,
-        epochs=epochs,
-        batch_size=batch,
-        validation_data=(val_x, Y_val_std),
-        verbose=0,)
+            x=train_x,
+            y=Y_train_std,
+            epochs=epochs,
+            batch_size=batch,
+            validation_data=(val_x, Y_val_std),
+            verbose=0,)
 
     # Return the final validation MAE
     val_mae = history.history['val_mae'][-1]
     return val_mae
 
 
+# def build_model(lr, resolution_in_degrees):
+#     """Use Keras functional API to create neural network model"""
+
+#     tf.keras.backend.clear_session()
+#     tf.random.set_seed(1234)
+#     random.seed(42)
+#     mask_value = -999
+
+#     bedroomcnt = layers.Input(shape=(1,), dtype=tf.float32, name='bedroomcnt')
+#     roomcnt = layers.Input(shape=(1,), dtype=tf.float32, name='roomcnt')
+#     bathroomcnt = layers.Input(
+#         shape=(1,), dtype=tf.float32, name='bathroomcnt')
+#     taxamount = layers.Input(shape=(1,), dtype=tf.float32, name='taxamount')
+#     landtaxvaluedollarcnt = layers.Input(
+#         shape=(1,), dtype=tf.float32, name='landtaxvaluedollarcnt')
+#     taxvaluedollarcnt = layers.Input(
+#         shape=(1,), dtype=tf.float32, name='taxvaluedollarcnt')
+#     structuretaxvaluedollarcnt = layers.Input(
+#         shape=(1,), dtype=tf.float32, name='structuretaxvaluedollarcnt')
+#     latitude = layers.Input(shape=(1,), dtype=tf.float32, name='latitude')
+#     longitude = layers.Input(shape=(1,), dtype=tf.float32, name='longitude')
+#     month = layers.Input(shape=(1,), dtype=tf.string, name='month')
+#     year = layers.Input(shape=(1,), dtype=tf.string, name='year')
+#     weekday = layers.Input(shape=(1,), dtype=tf.int64, name='weekday')
+
+#     lotsizesquarefeet = layers.Input(
+#         shape=(1,), dtype=tf.float32, name='lotsizesquarefeet')
+#     lotsizemask = layers.Masking(mask_value=mask_value)(lotsizesquarefeet)
+
+#     calculatedfinishedsquarefeet = layers.Input(
+#         shape=(1,), dtype=tf.float32, name='calculatedfinishedsquarefeet')
+#     finishedsqftmask = layers.Masking(
+#         mask_value=mask_value)(calculatedfinishedsquarefeet)
+
+#     yearbuilt = layers.Input(shape=(1,), dtype=tf.float32, name='yearbuilt')
+#     yearblt = layers.Masking(mask_value=mask_value)(yearbuilt)
+
+#     bedroomcnt_masked = layers.Masking(mask_value=mask_value)(bedroomcnt)
+#     roomcnt_masked = layers.Masking(mask_value=mask_value)(roomcnt)
+#     bathroomcnt_masked = layers.Masking(mask_value=mask_value)(bathroomcnt)
+#     taxamount_masked = layers.Masking(mask_value=mask_value)(taxamount)
+#     landtaxvaluedollarcnt_masked = layers.Masking(
+#         mask_value=mask_value)(landtaxvaluedollarcnt)
+#     taxvaluedollarcnt_masked = layers.Masking(
+#         mask_value=mask_value)(taxvaluedollarcnt)
+#     structuretaxvaluedollarcnt_masked = layers.Masking(
+#         mask_value=mask_value)(structuretaxvaluedollarcnt)
+
+#     # month_as_string = tf.strings.as_string(month)
+#     # One hot encode month, year and weekday
+#     # month_id = tf.keras.layers.StringLookup(
+#     #     vocabulary=['01', '02', '03', '04', '05',
+#     #                 '06', '07', '08', '09', '10', '11', '12'],
+#     #     output_mode='one_hot')(month)
+#     month_id = tf.keras.layers.StringLookup(
+#     vocabulary=['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+#     output_mode='one_hot')(month)
+
+
+#     year_id = tf.keras.layers.StringLookup(
+#         vocabulary=['2016', '2017'],
+#         output_mode='one_hot')(year)
+
+#     weekday_id = tf.keras.layers.IntegerLookup(
+#         vocabulary=[0, 1, 2, 3, 4, 5, 6],
+#         output_mode='one_hot')(weekday)
+
+#     # Create a list of numbers representing the bucket boundaries for latitude.
+#     latitude_boundaries = list(
+#         np.arange(-3, 3 + resolution_in_degrees, resolution_in_degrees))
+
+#     # Create a Discretization layer to separate the latitude data into buckets.
+#     latitude_discretized = tf.keras.layers.Discretization(
+#         bin_boundaries=latitude_boundaries,
+#         name='discretization_latitude')(latitude)
+
+#     # Create a list of numbers representing the bucket boundaries for longitude.
+#     longitude_boundaries = list(
+#         np.arange(-3, 3 + resolution_in_degrees, resolution_in_degrees))
+
+#     # Create a Discretization layer to separate the longitude data into buckets.
+#     longitude_discretized = tf.keras.layers.Discretization(
+#         bin_boundaries=longitude_boundaries,
+#         name='discretization_longitude')(longitude)
+
+#     # Cross the latitude and longitude features into a single one-hot vector.
+#     feature_cross = tf.keras.layers.HashedCrossing(
+#         num_bins=len(latitude_boundaries) * len(longitude_boundaries),
+#         output_mode='one_hot',
+#         name='cross_latitude_longitude')([latitude_discretized, longitude_discretized])
+
+#     features = layers.Concatenate()([
+#         bedroomcnt_masked,
+#         roomcnt_masked,
+#         bathroomcnt_masked,
+#         taxamount_masked,
+#         landtaxvaluedollarcnt_masked,
+#         taxvaluedollarcnt_masked,
+#         structuretaxvaluedollarcnt_masked,
+#         feature_cross,
+#         month_id,
+#         year_id,
+#         weekday_id,
+#         lotsizemask,
+#         finishedsqftmask,
+#         yearblt,
+#     ])
+
+#     x = layers.Dense(units=600, kernel_initializer='normal',
+#                      activation='relu')(features)
+#     x = layers.Dropout(0.36)(x)
+#     x = layers.Dense(units=200, kernel_initializer='normal',
+#                      activation='relu')(x)
+#     x = layers.BatchNormalization()(x)
+#     x = layers.Dropout(0.6)(x)
+#     x = layers.Dense(1, kernel_initializer='normal')(x)
+#     x = layers.Dense(1, kernel_initializer='normal')(x)
+
+#     logerror = tf.keras.layers.Dense(
+#         units=1, activation='linear', name='logerror')(x)
+
+#     model = tf.keras.Model(inputs=[
+#         bedroomcnt,
+#         roomcnt,
+#         bathroomcnt,
+#         taxamount,
+#         landtaxvaluedollarcnt,
+#         taxvaluedollarcnt,
+#         structuretaxvaluedollarcnt,
+#         latitude,
+#         longitude,
+#         month,
+#         year,
+#         weekday,
+#         lotsizesquarefeet,
+#         calculatedfinishedsquarefeet,
+#         yearbuilt,
+#     ], outputs=logerror)
+
+#     model.compile(
+#         optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
+#         loss='mae',
+#         metrics=['mae'])
+
+#     return model
+
+
 def build_model(lr, resolution_in_degrees):
-    """Use Keras functional API to create neural network model"""
+
 
     tf.keras.backend.clear_session()
     tf.random.set_seed(1234)
     random.seed(42)
-    mask_value = -999
 
     bedroomcnt = layers.Input(shape=(1,), dtype=tf.float32, name='bedroomcnt')
     roomcnt = layers.Input(shape=(1,), dtype=tf.float32, name='roomcnt')
-    bathroomcnt = layers.Input(
-        shape=(1,), dtype=tf.float32, name='bathroomcnt')
+    bathroomcnt = layers.Input(shape=(1,), dtype=tf.float32, name='bathroomcnt')
     taxamount = layers.Input(shape=(1,), dtype=tf.float32, name='taxamount')
-    landtaxvaluedollarcnt = layers.Input(
-        shape=(1,), dtype=tf.float32, name='landtaxvaluedollarcnt')
-    taxvaluedollarcnt = layers.Input(
-        shape=(1,), dtype=tf.float32, name='taxvaluedollarcnt')
-    structuretaxvaluedollarcnt = layers.Input(
-        shape=(1,), dtype=tf.float32, name='structuretaxvaluedollarcnt')
+    landtaxvaluedollarcnt = layers.Input(shape=(1,), dtype=tf.float32, name='landtaxvaluedollarcnt')
+    taxvaluedollarcnt = layers.Input(shape=(1,), dtype=tf.float32, name='taxvaluedollarcnt')
+    structuretaxvaluedollarcnt = layers.Input(shape=(1,), dtype=tf.float32, name='structuretaxvaluedollarcnt')
     latitude = layers.Input(shape=(1,), dtype=tf.float32, name='latitude')
     longitude = layers.Input(shape=(1,), dtype=tf.float32, name='longitude')
-    month = layers.Input(shape=(1,), dtype=tf.string, name='month')
-    year = layers.Input(shape=(1,), dtype=tf.string, name='year')
+    month = layers.Input(shape=(1,), dtype=tf.int64, name='month')
+    year = layers.Input(shape=(1,), dtype=tf.int64, name='year')
     weekday = layers.Input(shape=(1,), dtype=tf.int64, name='weekday')
 
-    lotsizesquarefeet = layers.Input(
-        shape=(1,), dtype=tf.float32, name='lotsizesquarefeet')
-    lotsizemask = layers.Masking(mask_value=mask_value)(lotsizesquarefeet)
 
-    calculatedfinishedsquarefeet = layers.Input(
-        shape=(1,), dtype=tf.float32, name='calculatedfinishedsquarefeet')
-    finishedsqftmask = layers.Masking(
-        mask_value=mask_value)(calculatedfinishedsquarefeet)
+    lotsizesquarefeet = layers.Input(shape=(1,), dtype=tf.float32, name='lotsizesquarefeet')
+
+    calculatedfinishedsquarefeet = layers.Input(shape=(1,), dtype=tf.float32, name='calculatedfinishedsquarefeet')
+
 
     yearbuilt = layers.Input(shape=(1,), dtype=tf.float32, name='yearbuilt')
-    yearblt = layers.Masking(mask_value=mask_value)(yearbuilt)
 
-    bedroomcnt_masked = layers.Masking(mask_value=mask_value)(bedroomcnt)
-    roomcnt_masked = layers.Masking(mask_value=mask_value)(roomcnt)
-    bathroomcnt_masked = layers.Masking(mask_value=mask_value)(bathroomcnt)
-    taxamount_masked = layers.Masking(mask_value=mask_value)(taxamount)
-    landtaxvaluedollarcnt_masked = layers.Masking(
-        mask_value=mask_value)(landtaxvaluedollarcnt)
-    taxvaluedollarcnt_masked = layers.Masking(
-        mask_value=mask_value)(taxvaluedollarcnt)
-    structuretaxvaluedollarcnt_masked = layers.Masking(
-        mask_value=mask_value)(structuretaxvaluedollarcnt)
 
-    # One hot encode month, year and weekday
-    month_id = tf.keras.layers.StringLookup(
-        vocabulary=['01', '02', '03', '04', '05',
-                    '06', '07', '08', '09', '10', '11', '12'],
-        output_mode='one_hot')(month)
 
-    year_id = tf.keras.layers.StringLookup(
-        vocabulary=['2016', '2017'],
-        output_mode='one_hot')(year)
+    month_id = tf.keras.layers.IntegerLookup(
+       vocabulary=list(range(1, 13)),
+       output_mode='one_hot')(month)
+
+    year_id = tf.keras.layers.IntegerLookup(
+      vocabulary=[2016, 2017],
+      output_mode='one_hot')(year)
 
     weekday_id = tf.keras.layers.IntegerLookup(
-        vocabulary=[0, 1, 2, 3, 4, 5, 6],
-        output_mode='one_hot')(weekday)
+       vocabulary=[0,1,2,3,4,5,6],
+       output_mode='one_hot')(weekday)
 
     # Create a list of numbers representing the bucket boundaries for latitude.
-    latitude_boundaries = list(
-        np.arange(-3, 3 + resolution_in_degrees, resolution_in_degrees))
+    latitude_boundaries = list(np.arange(-3, 3 + resolution_in_degrees, resolution_in_degrees))
 
     # Create a Discretization layer to separate the latitude data into buckets.
     latitude_discretized = tf.keras.layers.Discretization(
@@ -177,8 +304,7 @@ def build_model(lr, resolution_in_degrees):
         name='discretization_latitude')(latitude)
 
     # Create a list of numbers representing the bucket boundaries for longitude.
-    longitude_boundaries = list(
-        np.arange(-3, 3 + resolution_in_degrees, resolution_in_degrees))
+    longitude_boundaries = list(np.arange(-3, 3 + resolution_in_degrees, resolution_in_degrees))
 
     # Create a Discretization layer to separate the longitude data into buckets.
     longitude_discretized = tf.keras.layers.Discretization(
@@ -192,31 +318,32 @@ def build_model(lr, resolution_in_degrees):
         name='cross_latitude_longitude')([latitude_discretized, longitude_discretized])
 
     features = layers.Concatenate()([
-        bedroomcnt_masked,
-        roomcnt_masked,
-        bathroomcnt_masked,
-        taxamount_masked,
-        landtaxvaluedollarcnt_masked,
-        taxvaluedollarcnt_masked,
-        structuretaxvaluedollarcnt_masked,
-        feature_cross,
-        month_id,
-        year_id,
-        weekday_id,
-        lotsizemask,
-        finishedsqftmask,
-        yearblt,
-    ])
+                    bedroomcnt,
+                    roomcnt,
+                    bathroomcnt,
+                    taxamount,
+                    landtaxvaluedollarcnt,
+                    taxvaluedollarcnt,
+                    structuretaxvaluedollarcnt,
+                    feature_cross,
+                    year_id,
+                    month_id,
+                    weekday_id,
+                   lotsizesquarefeet,
+                   calculatedfinishedsquarefeet,
+                   yearbuilt,
+    ])  
 
-    x = layers.Dense(units=600, kernel_initializer='normal',
-                     activation='relu')(features)
+
+    x = layers.Dense(units=600, kernel_initializer='normal', activation='relu')(features)
     x = layers.Dropout(0.36)(x)
-    x = layers.Dense(units=200, kernel_initializer='normal',
-                     activation='relu')(x)
+    x = layers.Dense(units=200, kernel_initializer='normal', activation='relu')(x)
     x = layers.BatchNormalization()(x)
     x = layers.Dropout(0.6)(x)
     x = layers.Dense(1, kernel_initializer='normal')(x)
     x = layers.Dense(1, kernel_initializer='normal')(x)
+
+
 
     logerror = tf.keras.layers.Dense(
         units=1, activation='linear', name='logerror')(x)
@@ -231,12 +358,12 @@ def build_model(lr, resolution_in_degrees):
         structuretaxvaluedollarcnt,
         latitude,
         longitude,
-        month,
         year,
-        weekday,
-        lotsizesquarefeet,
-        calculatedfinishedsquarefeet,
-        yearbuilt,
+       month,
+       weekday,
+       lotsizesquarefeet,
+       calculatedfinishedsquarefeet,
+       yearbuilt,
     ], outputs=logerror)
 
     model.compile(
@@ -247,11 +374,10 @@ def build_model(lr, resolution_in_degrees):
     return model
 
 
-
 ######## Data reading specific to NN 
 def read_test_data():
-    sample = pd.read_csv('../data/sample_submission.csv')
-    prop = pd.read_csv('../data/properties_2017.csv')
+    sample = pd.read_csv('./data/sample_submission.csv')
+    prop = pd.read_csv('./data/properties_2017.csv')
     sample['parcelid'] = sample['ParcelId']
     df_test = sample.merge(prop, on='parcelid', how = 'left')
 
@@ -267,8 +393,8 @@ def create_clean_test(df_test, X_train):
     x_test = df_test[train_columns]
 
     # Set the transaction date dependent columns to constants
-    x_test['month'] = "12"
-    x_test['year'] = "2016"
+    x_test['month'] = 12
+    x_test['year'] = 2016
     x_test['weekday'] = 4
 
     X_test_std = x_test.copy()
