@@ -34,6 +34,7 @@ A repository to collaborate on the 207 final project with the Zillow dataset fro
 
 ## Introduction: Zillow Prize: Zillow’s Home Value Prediction (Zestimate)
 Final Presentation: https://docs.google.com/presentation/d/1P2qw-P_IGXfVtL0Z3CI2SN_yu2evm7HAHM72QR8oEGk/edit?usp=sharing
+
 Competition Website: https://www.kaggle.com/competitions/zillow-prize-1
 
 **Question:** Can we improve the Zillow Zestimate? YES
@@ -50,21 +51,23 @@ Specifically, predict the log-error between Zillow’s Zestimate and the actual 
 **Data:** Full list of real estate properties in three counties (Los Angeles, Orange and Ventura, California) data in 2016 for train and validation. Zillow maintains public (2016) and private (2017) data for testing used for competition scoring.
 Link to data: https://www.kaggle.com/competitions/zillow-prize-1/data
 
-| Data File             |  Records  | Columns | 
-| --------------------- | --------- | ------- | 
-| properties_2016.csv   | 2,985,217 | 58      | 
-| properties_2017.csv   | 2,985,217 | 58      | 
-| train_2016_v2.csv     | 90,275    | 3       | 
-| train_2016.csv        | 77,613    | 3       | 
-| sample_submission.csv | 2,985,217 | 7       | 
+| Data File             |  Records  | Columns | Description | 
+| --------------------- | --------- | ------- | ------- | 
+| properties_2016.csv   | 2,985,217 | 58      | All the properties with their home features for 2016. Note: Some 2017 new properties don't have any data yet except for their parcelid's. Those data points should be populated when properties_2017.csv is available.     | 
+| properties_2017.csv   | 2,985,217 | 58      | All the properties with their home features for 2017 (released on 10/2/2017)      | 
+| train_2016_v2.csv     | 90,275    | 3       | The training set with transactions from 1/1/2016 to 12/31/2016      | 
+| train_2016.csv        | 77,613    | 3       | The training set with transactions from 1/1/2017 to 9/15/2017 (released on 10/2/2017)      | 
+| sample_submission.csv | 2,985,217 | 7       | A sample submission file in the correct format      | 
 
 **Modeling/Experiments:**
-* Multi linear regression - Worse than Zillow
-* Neural Networks - Better than Zillow
-* Gradient Boosting Algorithms - Better than Zillow
-* Combination (Neural Network with XGBoost) - Better than Zillow
+* Model 1: Multi linear regression - Worse than Zillow
+* Model 2: Neural Networks - Better than Zillow
+* Model 3: Gradient Boosting Algorithms - Better than Zillow
+* Model 4: Combination (Neural Network with XGBoost) - Better than Zillow
 
-**Future Work:** Feature Engineering, Explore other Combination Models
+**Future Work:** 
+* Feature Engineering - Explore augmenting data with more real estate data. Majority of the Zillow data is incomplete and many had 99% missing values.
+* Explore other Combination Models - The combination neural and XGBoost yielded significant results. Other combination models may yield addition results.
 
 
 ## Model 1: Linear Regression
@@ -84,8 +87,37 @@ We concluded that the MLR model is likely inappropriate for this model, as lower
 
 ## Model 2: Neural Network
 
+The neural network model developed for this project is designed to predict the log error of the Zillow model based on a subset of property features. Below is an explanation of the data processing, model architecture and hyperparameter tuning.
+
+### Data Preparation
+
+We removes rows with missing critical data. Additionally, features such as month, year, and weekday are extracted from the transaction dates and added as features. We select other relevant features from the dataset, including property characteristics like bedroom count, tax amounts, and geographical coordinates. The dataset is split into training and validation sets.
+
+Standardization is applied to numeric features to ensure they are on a similar scale, which helps in training the neural network. Missing data is masked with a specific value to handle incomplete records.
+
+### Model Architecture
+The neural network model is constructed using TensorFlow's Keras API, with the following architecture:
+
+* Input Layer: The model takes multiple property features as inputs, including numerical values (e.g., bedroom count, tax amount) and categorical values (e.g., month, year).
+* Feature Engineering: Latitude and longitude features are discretized and crossed to capture geographical interactions. Categorical features (month, year, weekday) are one-hot encoded.
+* Hidden Layers: The model contains dense layers with ReLU activation functions, interspersed with dropout layers to prevent overfitting and batch normalization layers to stabilize training.
+* Output Layer: The final output is a single neuron with a linear activation function that predicts the log error of the Zillow model.
+
+### Hyperparameter Tuning
+
+To enhance our neural network model, we used Optuna to optimize key hyperparameters, focusing on:
+
+* Learning Rate (lr): Determines how quickly the model learns during training. We optimized it to balance fast convergence with stability.
+* Resolution of Geographic Features (resolution_in_degrees): Defines the level of detail in geographic data. We tested different resolutions to find the most effective level of granularity.
+* Number of Epochs (epochs): Specifies how many times the model sees the entire dataset during training. We optimized the number to ensure sufficient learning without overfitting.
+* Batch Size (batch): The number of samples processed at once during training. We adjusted this to find a good trade-off between computational efficiency and model stability.
+
+Optuna explored various combinations of these hyperparameters to minimize the validation mean absolute error (MAE). We run the tuning function for 100 trials, and then use the best parameters to train the final neural network model.
+
 ## Model 3: XGBoost
 Gradient Boosting Algorithms: Scalable boosted tree algorithm, where trees are built in parallel. It minimizes the loss function by adding models sequentially, focusing on reducing the errors made by the previous models. Excellent for handling complex, non-linear relationships in the data, and tabular data.  XGBoost was released March 27, 2014, a few years before the Zillow competition and not widely used. It started gaining in popularity, and XGBoost was named among InfoWorld’s coveted Technology of the Year award winners in 2019. XGBoost is easy to implement. The run time is fast, and it provides excellent results. XGBoost performed well against the 2016 Zillow ZEstimate. It had a 0.00134 improvement for the private score over the Zillow baselise, and 0.00104 improvement for the public score.
+
+### Hyperparameter Tuning
 
 The train vs validation MAE were within 1%, so it generalized well.
 
@@ -141,7 +173,9 @@ Next, you can cd into the repository
 ```bash
 cd zillow-project
 ```
+### Getting the Data
 
+Go to https://www.kaggle.com/competitions/zillow-prize-1/data and download all the files provided on the page. Ensure these files are placed in the `data` folder of the repository.
 
 ### Install Dependencies 
 Once you have cloned the repository, install the required dependencies using pip. You can find these dependencies listed in the requirements.txt file. Run the following command to install them:
