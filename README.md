@@ -12,9 +12,12 @@ A repository to collaborate on the 207 final project with the Zillow dataset fro
 
 ## Linear Regression Model
 
-## Neural Network, with table
-## XGBoost, with table
-## NN + XGBoost, with table
+## Neural Network Model
+
+## XGBoost Model
+
+## NN + XGBoost Model
+
 ## How to run the pipeline/installation
 
 ## Contribution Table
