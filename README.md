@@ -242,6 +242,12 @@ The `main.py` script is the entry point for running the Zillow project pipeline.
 
   Use this option if you want to load a pretrained model to generate predictions. You need to provide the path to the pretrained model file.
 
+  To load a pretrained model and generate predictions, use the following command:
+
+```bash
+python main.py --env local --predict neural_network --features raw_data/features.json
+```
+
 ### 6. Generating the Submission File
 
 After running the model, the script will automatically generate a submission file in CSV format, which you can use to submit predictions to Kaggle.

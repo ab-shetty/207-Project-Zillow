@@ -251,10 +251,9 @@ def load_pretrained_model_and_predict(model_name, feature_data):
 
     print(f"Loading pretrained model from {model_path}...")
 
-    # Load the model (assuming Keras models, modify as needed for XGBoost or other formats)
+    # Load the model
     if model_name == 'xgboost':
-        # Add XGBoost model loading logic here
-        pass  # Placeholder for XGBoost model loading
+        pass  
     else:
         model = tf.keras.models.load_model(model_path)
         print("Model loaded successfully.")
@@ -291,27 +290,26 @@ def setup_colab():
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Run the Zillow project pipeline.")
-
+    parser = argparse.ArgumentParser(description="Run the Zillow project pipeline.")
+    
     # Add argument to select environment
     parser.add_argument('--env', choices=['local', 'colab'], required=True,
                         help="Choose the environment to run the pipeline: 'local' or 'colab'.")
-
+    
     # Add argument to select model to train
-    parser.add_argument('--model', choices=['linear_regression', 'neural_network', 'xgboost', 'combination'],
+    parser.add_argument('--model', choices=['linear_regression', 'neural_network', 'xgboost', 'combination'], 
                         help="Choose the model to train: 'linear_regression', 'neural_network', 'xgboost', or 'combination'.")
-
+    
     # Add argument to load a pretrained model and generate predictions
-    parser.add_argument('--predict', metavar='model_name',
-                        help="Name of the pretrained model to use for generating predictions.")
-
+    parser.add_argument('--predict', choices=['combo_nn', 'mlr', 'nn'], 
+                        help="Name of the pretrained model to use for generating predictions. Choose from 'combo_nn', 'mlr', or 'nn'.")
+    
     # Add argument for feature data input
-    parser.add_argument('--features', type=str,
-                        help="Path to a JSON file containing the feature data for predictions.")
+    parser.add_argument('--features', type=str, 
+                        help="Name of the JSON file containing the feature data for predictions (located in the 'raw_data' folder).")
 
     args = parser.parse_args()
-
+    
     # Set up environment
     if args.env == 'local':
         data_path = setup_local()
@@ -320,7 +318,7 @@ def main():
     else:
         print("Invalid environment option.")
         sys.exit(1)
-
+    
     # Train selected model
     if args.model:
         if args.model == 'linear_regression':
@@ -334,21 +332,23 @@ def main():
         else:
             print("Invalid model option.")
             sys.exit(1)
-
+    
     # Load pretrained model and generate predictions
-    # python main.py --env local --predict neural_network --features path/to/features.json
-
     if args.predict:
         if not args.features:
-            print("Please provide the path to a JSON file containing the feature data for predictions using --features.")
+            print("Please provide the name of a JSON file containing the feature data for predictions using --features.")
+            sys.exit(1)
+        
+        # Load feature data from JSON file in 'raw_data' folder
+        feature_data_path = f'./raw_data/{args.features}'
+        try:
+            with open(feature_data_path, 'r') as f:
+                feature_data = json.load(f)
+        except FileNotFoundError:
+            print(f"Feature file {feature_data_path} not found.")
             sys.exit(1)
 
-        # Load feature data from JSON file
-        with open(args.features, 'r') as f:
-            feature_data = json.load(f)
-
         load_pretrained_model_and_predict(args.predict, feature_data)
-
 
 if __name__ == "__main__":
     main()
