@@ -116,7 +116,7 @@ def run_neural_network(nn_only=True):
     objective_partial = partial(
         objective_nn, train_x=train_x, Y_train_std=Y_train_std, val_x=val_x, Y_val_std=Y_val_std)
     study = optuna.create_study(direction='minimize')
-    study.optimize(objective_partial, n_trials=5, timeout=900)
+    study.optimize(objective_partial, n_trials=50, timeout=900)
 
     # Extracting the best parameters from the study
     best_params = study.best_params

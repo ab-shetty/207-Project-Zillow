@@ -58,7 +58,7 @@ def train_tune_xgb_model(d_train, d_valid):
     # Create a study object and optimize the objective function
     objective_partial = partial(objective, d_train=d_train, d_valid=d_valid)
     study = optuna.create_study(direction='minimize')
-    study.optimize(objective_partial, n_trials=20, timeout=600)
+    study.optimize(objective_partial, n_trials=100, timeout=600)
 
     # Print the best parameters
     print(f"Best Parameters: {study.best_params}")

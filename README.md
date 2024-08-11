@@ -97,7 +97,7 @@ The neural network model developed for this project is designed to predict the l
 
 We removes rows with missing critical data. Additionally, features such as month, year, and weekday are extracted from the transaction dates and added as features. We select other relevant features from the dataset, including property characteristics like bedroom count, tax amounts, and geographical coordinates. The dataset is split into training and validation sets.
 
-Standardization is applied to numeric features to ensure they are on a similar scale, which helps in training the neural network. Missing data is masked with a specific value to handle incomplete records.
+Standardization is applied to numeric features to ensure they are on a similar scale, which helps in training the neural network. Missing data is masked with zero to handle incomplete records.
 
 ### Model Architecture
 The neural network model is constructed using TensorFlow's Keras API, with the following architecture:
@@ -112,7 +112,7 @@ The neural network model is constructed using TensorFlow's Keras API, with the f
 To enhance our neural network model, we used Optuna to optimize key hyperparameters, focusing on:
 
 * Learning Rate (lr): Determines how quickly the model learns during training. We optimized it to balance fast convergence with stability.
-* Resolution of Geographic Features (resolution_in_degrees): Defines the level of detail in geographic data. We tested different resolutions to find the most effective level of granularity.
+* Resolution of Coordinates (resolution_in_degrees): Defines the level of detail in latitude/longitude. We tested different resolutions to find the most effective level of granularity.
 * Number of Epochs (epochs): Specifies how many times the model sees the entire dataset during training. We optimized the number to ensure sufficient learning without overfitting.
 * Batch Size (batch): The number of samples processed at once during training. We adjusted this to find a good trade-off between computational efficiency and model stability.
 
@@ -216,7 +216,17 @@ If you are working on Google Colab and want to train a Neural Network model:
 ```bash
 python main.py --env colab --model neural_network
 ```
+Finally, to train the best model - the combination model, run:
 
+```bash
+python main.py --env local --model combination
+```
+or 
+
+```bash
+python main.py --env colab --model combination
+```
+<br>
 Or, Generate Predictions Using a Pretrained Model:
 To load a pretrained model and generate predictions (for example, on your local machine):
 ```bash
