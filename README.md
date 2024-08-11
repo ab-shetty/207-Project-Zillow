@@ -301,8 +301,9 @@ After running the model, the script will automatically generate a submission fil
 |                    | **XGBoost**                              | 10          |
 |                    | - Model Development                      | 6           |
 |                    | - Model Tuning                           | 4           |
-|                    | **Model Architecture**                   | 6           |
+|                    | **Model Architecture**                   | 24          |
 |                    | - Designing Model Structure              | 4           |
 |                    | - Hyperparameter Tuning                  | 2           |
-|                    | **Total**                                | **24**      |
+|                    | - ML Pipeline                            | 18          |
+|                    | **Total**                                | **46**      |
 
