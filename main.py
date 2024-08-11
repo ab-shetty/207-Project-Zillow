@@ -10,7 +10,7 @@ import xgboost as xgb
 from functools import partial
 import optuna
 
-from models.load_data import load_mlr_data, load_xgb_data
+from models.load_data import load_data
 from models.mlr import process_mlr_data, build_mlr_model, generate_mlr_prediction
 from models.xgb import process_xgb_data, train_tune_xgb_model, generate_xgb_prediction
 from models.nn import process_nn_data, nn_train_val, objective_nn, build_model, read_test_data, create_clean_test
@@ -35,7 +35,7 @@ base_path = './data/'
 def run_linear_regression():
     print("Running Linear Regression model and saving submission file...")
     ## Load Data ##
-    df_properties, sample, df_logs, df_train = load_mlr_data(base_path)
+    df_properties, sample, df_logs, df_train = load_data(base_path)
 
     ## MLR data processing ##
     X_train, X_val, y_train, y_val, data = process_mlr_data(df_train)
@@ -64,13 +64,14 @@ def run_linear_regression():
     # Replacing missing predictions with average of test data predictions
     for i in range(num_missing):
         test_preds = np.append(test_preds, average_preds)
+
     save_submission(test_preds)
 
 
 def run_neural_network(nn_only=True):
     print("Running Neural Network model...")
 
-    df_properties, sample, df_logs, df_all = load_mlr_data(base_path)
+    df_properties, sample, df_logs, df_all = load_data(base_path)
     X_train, X_val, Y_train, Y_val, X, Y = process_nn_data(df_all)
 
     X_train_std, X_val_std, Y_train_std, Y_val_std, y_mean, y_std = nn_train_val(
@@ -179,12 +180,11 @@ def run_neural_network(nn_only=True):
 def run_xgboost():
     print("Training XGBoost model...")
     ## Load Data ##
-    train, prop, sample = load_xgb_data(base_path)
+    prop, sample, df_logs, train = load_data(base_path)
 
     ## XGBoost processing ##
     # Build XGBoost DMatrix objects for efficient processing
-    x_train, y_train, x_valid, y_valid, train_columns = process_xgb_data(
-        train, prop)
+    x_train, y_train, x_valid, y_valid, train_columns = process_xgb_data(train)
     d_train = xgb.DMatrix(x_train, label=y_train)
     d_valid = xgb.DMatrix(x_valid, label=y_valid)
 
@@ -192,7 +192,7 @@ def run_xgboost():
 
     # Train Model on Best Parameters
     params = study.best_params
-    #params = {'eta': 0.022382530987582482, 'max_depth': 5, 'subsample': 0.6561243067188417, 'colsample_bytree': 0.6775779485416246, 'n_estimators': 640, 'lambda': 0.9942582014915469, 'alpha': 7.97377143057426e-08}
+ #   params = {'eta': 0.01176727966630982, 'max_depth': 7, 'subsample': 0.9530704266351121, 'colsample_bytree': 0.6766181145946257, 'n_estimators': 111, 'lambda': 0.15199179789644604, 'alpha': 0.004175318804522233}
     params['objective'] = 'reg:linear'
     params['eval_metric'] = 'mae'
 
@@ -200,9 +200,9 @@ def run_xgboost():
     clf = xgb.train(params, d_train, 10000, watchlist,
                     early_stopping_rounds=100, verbose_eval=10)
 
-    p_test = generate_xgb_prediction(clf, prop, sample, train_columns)
+    pred = generate_xgb_prediction(clf, prop, sample, train_columns)
 
-    save_submission(p_test)
+    save_submission(pred)
 
 
 # ANOTHER FUNCTIONS

@@ -2,18 +2,11 @@ import numpy as np
 import optuna
 import xgboost as xgb
 
+from sklearn.model_selection import train_test_split
 from functools import partial
 
 
-def process_xgb_data(train, prop):
-
-    # Convert float64 columns to float32 to reduce memory usage
-    for c, dtype in zip(prop.columns, prop.dtypes):
-        if dtype == np.float64:
-            prop[c] = prop[c].astype(np.float32)
-
-    # Merge training data with property data
-    df_train = train.merge(prop, how='left', on='parcelid')
+def process_xgb_data(df_train):
 
     # Prepare features (X) and target variables (y) for training
     # Drop unnecessary columns
@@ -29,11 +22,10 @@ def process_xgb_data(train, prop):
         x_train[c] = (x_train[c] == True)
 
     # Create training and validation dataset
-    split = 80000
-    x_train, y_train, x_valid, y_valid = x_train[:
-                                                 split], y_train[:split], x_train[split:], y_train[split:]
+    X_train, X_val, y_train, y_val = train_test_split(
+        x_train, y_train, test_size=0.2, random_state=42)
 
-    return x_train, y_train, x_valid, y_valid, train_columns
+    return X_train, y_train, X_val, y_val, train_columns
 
 
 # Define the objective function

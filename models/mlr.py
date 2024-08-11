@@ -6,8 +6,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_absolute_error
 
-from models.load_data import load_mlr_data
-
 
 def process_mlr_data(df_train):
     # Dropping all rows where there is no longitude or latitidue data
