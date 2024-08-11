@@ -274,7 +274,6 @@ def load_pretrained_model_and_predict(model_name, feature_data):
 
 def setup_local():
     print("Setting up for local environment...")
-    # Replace with actual data loading logic
     data_path = "./data/"
     print(f"Data should be located in {data_path}")
     return data_path
