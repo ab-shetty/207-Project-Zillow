@@ -42,7 +42,7 @@ Specifically, predict the log-error between Zillow’s Zestimate and the actual 
 <br>
 𝑙𝑜𝑔𝑒𝑟𝑟𝑜𝑟=𝑙𝑜𝑔(𝑍𝑒𝑠𝑡𝑖𝑚𝑎𝑡𝑒)−𝑙𝑜𝑔(𝑆𝑎𝑙𝑒𝑃𝑟𝑖𝑐𝑒)
 
-**Motivation (Why is it interesting?):** 
+**Why is it interesting?** 
 * Zillow has since become established as one of the largest, most trusted marketplaces for real estate information in the U.S. and a leading example of impactful machine learning
 * $1M Kaggle competition closed in 2018
 * Well defined problem
@@ -60,14 +60,16 @@ Link to data: https://www.kaggle.com/competitions/zillow-prize-1/data
 | sample_submission.csv | 2,985,217 | 7       | A sample submission file in the correct format      | 
 
 **Modeling/Experiments:**
+
+We trialled four different models and compared them to the original Zillow model
 * Model 1: Multi linear regression - Worse than Zillow
 * Model 2: Neural Networks - Better than Zillow
 * Model 3: Gradient Boosting Algorithms - Better than Zillow
-* Model 4: Combination (Neural Network with XGBoost) - Better than Zillow
+* Model 4: Combination (Neural Network with XGBoost) - Better than Zillow, best of the four models
 
 **Future Work:** 
-* Feature Engineering - Explore augmenting data with more real estate data. Majority of the Zillow data is incomplete and many had 99% missing values.
-* Explore other Combination Models - The combination neural and XGBoost yielded significant results. Other combination models may yield addition results.
+* Feature Engineering - Explore augmenting data with more real estate data. Majority of the Zillow data is incomplete and many features had 99% missing values.
+* Explore other Combination Models - The combination neural and XGBoost yielded significant results. Other combination models may yield even better results.
 
 
 ## Model 1: Linear Regression
@@ -270,15 +272,15 @@ After running the model, the script will automatically generate a submission fil
 
 | Name               | Section Worked On                        | Hours Spent |
 |--------------------|------------------------------------------|-------------|
-| Abhishek Shetty    | **Feature Engineering**                  | 8           |
-|                    | - Creating New Features                  | 5           |
-|                    | - Feature Selection                      | 3           |
-|                    | **Combination Model (NN + XGBoost)**     | 12          |
-|                    | - Model Development                      | 7           |
-|                    | - Training and Integration               | 5           |
-|                    | **Hyperparameter Tuning**                | 6           |
-|                    | - Tuning Combined Model                  | 6           |
-|                    | **Total**                                | **26**      |
+| Abhishek Shetty    | **Feature Engineering**                  | 15           |
+|                    | - Creating New Features                  | 10           |
+|                    | - Feature Selection                      | 5           |
+|                    | **Combination Model (NN + XGBoost)**     | 35          |
+|                    | - Model Development                      | 20          |
+|                    | - Training and Integration               | 15           |
+|                    | **Hyperparameter Tuning**                | 8           |
+|                    | - Tuning Combined Model                  | 8           |
+|                    | **Total**                                | **58**      |
 | Ahmeda Cheick      | **Exploratory Data Analysis (EDA)**      | 10          |
 |                    | - Data Cleaning                          | 4           |
 |                    | - Visualizations                         | 3           |
@@ -304,10 +306,3 @@ After running the model, the script will automatically generate a submission fil
 |                    | - Hyperparameter Tuning                  | 2           |
 |                    | **Total**                                | **24**      |
 
-
-[keras-url]: https://keras.io/
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
