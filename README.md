@@ -291,13 +291,14 @@ After running the model, the script will automatically generate a submission fil
 |                    | **Hyperparameter Tuning**                | 8           |
 |                    | - Tuning Combined Model                  | 8           |
 |                    | **Total**                                | **58**      |
-| Ahmeda Cheick      | **Exploratory Data Analysis (EDA)**      | 10          |
-|                    | - Data Cleaning                          | 4           |
-|                    | - Visualizations                         | 3           |
-|                    | **Neural Networks**                      | 12          |
-|                    | - Model Architecture                     | 5           |
-|                    | - Training and Evaluation                | 7           |
-|                    | **Total**                                | **22**      |
+| Ahmeda Cheick      | **Exploratory Data Analysis (EDA)**      | 21          |
+|                    | - Data Cleaning                          | 15           |
+|                    | - Visualizations                         | 6           |
+|                    | **Neural Networks**                      | 17          |
+|                    | - Model Architecture                     | 7           |
+|                    | - Training and Evaluation                | 10           |
+|                    | **Other (reports, debug, pipeline**      | 10          |
+|                    | **Total**                                | **48**      |
 | Athena Le          | **Multi-linear Regression**              | 11          |
 |                    | - Model Development                      | 8           |
 |                    | - Model Evaluation                       | 3           |
